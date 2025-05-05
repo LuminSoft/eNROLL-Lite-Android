@@ -3,6 +3,7 @@ package com.luminsoft.enroll_sdk.lumin_sdk.core
 import android.app.Activity
 import android.util.Log
 import com.luminsoft.ekyc_android_sdk.R
+import com.luminsoft.enroll_sdk.innovitices.core.RESULT_SUCCESS
 import com.luminsoft.ocr.LocalizationCode
 import com.luminsoft.ocr.OCR
 import com.luminsoft.ocr.core.models.OCRCallback
@@ -43,7 +44,8 @@ object LuminSDKHelper {
                             "OCRCallback",
                             "OCR Message :${ocrSuccessModel.ocrMessage}"
                         )
-
+                        activity.setResult(RESULT_SUCCESS, intent)
+                        activity.finish()
 //                        text.value = "OCR Message: ${ocrSuccessModel.ocrMessage}"
 
                     }
