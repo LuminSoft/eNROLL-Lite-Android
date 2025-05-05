@@ -1,6 +1,9 @@
 package com.luminsoft.enroll_sdk.lumin_sdk.core
 
 import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import com.luminsoft.ekyc_android_sdk.R
 import com.luminsoft.enroll_sdk.innovitices.core.RESULT_SUCCESS
@@ -11,6 +14,9 @@ import com.luminsoft.ocr.core.models.OCREnvironment
 import com.luminsoft.ocr.core.models.OCRFailedModel
 import com.luminsoft.ocr.core.models.OCRMode
 import com.luminsoft.ocr.core.models.OCRSuccessModel
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 object LuminSDKHelper {
 
@@ -44,6 +50,41 @@ object LuminSDKHelper {
                             "OCRCallback",
                             "OCR Message :${ocrSuccessModel.ocrMessage}"
                         )
+
+
+
+                        val file = getDisc()
+
+                        if (!file.exists() && !file.mkdirs()) {
+                            file.mkdir()
+                        }
+                        val dir = File(file.absolutePath)
+                        val filename = String.format("${System.currentTimeMillis()}.jpeg")
+                        val outfile = File(dir, filename)
+
+
+                        val fOut: OutputStream = FileOutputStream(outfile)
+                        val pictureBitmap: Bitmap =
+                            ocrSuccessModel.nationalIdImage!! // obtaining the Bitmap
+
+                        pictureBitmap.compress(
+                            Bitmap.CompressFormat.JPEG,
+                            100,
+                            fOut
+                        ) // saving the Bitmap to a file compressed as a JPEG with 85% compression rate
+
+                        fOut.flush() // Not really required
+
+                        fOut.close() // do not forget to close the stream
+
+
+                        val intent = Intent()
+                        val uri: Uri = Uri.fromFile(outfile)
+
+
+                        intent.data = uri
+
+
                         activity.setResult(RESULT_SUCCESS, intent)
                         activity.finish()
 //                        text.value = "OCR Message: ${ocrSuccessModel.ocrMessage}"
