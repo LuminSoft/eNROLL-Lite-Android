@@ -3,6 +3,8 @@ package com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_o
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -45,7 +47,6 @@ import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_na
 import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_navigation.nationalIdOnBoardingErrorScreen
 import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_navigation.nationalIdOnBoardingFrontConfirmationScreen
 import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_onboarding.view_model.NationalIdFrontOcrViewModel
-import com.luminsoft.enroll_sdk.innovitices.activities.DocumentActivity
 import com.luminsoft.enroll_sdk.innovitices.core.DotHelper
 import com.luminsoft.enroll_sdk.main.main_presentation.main_onboarding.view_model.OnBoardingViewModel
 import com.luminsoft.enroll_sdk.ui_components.components.BackGroundView
@@ -55,6 +56,13 @@ import com.luminsoft.enroll_sdk.ui_components.components.DialogView
 import com.luminsoft.enroll_sdk.ui_components.components.NormalTextField
 import com.luminsoft.enroll_sdk.ui_components.components.SpinKitLoadingIndicator
 import com.luminsoft.enroll_sdk.ui_components.theme.appColors
+import com.luminsoft.ocr.LocalizationCode
+import com.luminsoft.ocr.OCR
+import com.luminsoft.ocr.core.models.OCRCallback
+import com.luminsoft.ocr.core.models.OCREnvironment
+import com.luminsoft.ocr.core.models.OCRFailedModel
+import com.luminsoft.ocr.core.models.OCRMode
+import com.luminsoft.ocr.core.models.OCRSuccessModel
 import org.koin.compose.koinInject
 
 var userNameValue = mutableStateOf(TextFieldValue())
@@ -171,12 +179,14 @@ private fun MainContent(
 
     BackGroundView(navController = navController, showAppBar = true) {
         if (frontNIApproved.value) {
-            val intent =
-                Intent(activity.applicationContext, DocumentActivity::class.java)
-            intent.putExtra("scanType", DocumentActivity().backScan)
-            intent.putExtra("localCode", EnrollSDK.localizationCode.name)
-            startForBackResult.launch(intent)
-            nationalIdFrontOcrViewModel.scanBack()
+            //TODO check lumin sdk here
+            initOCR(activity, OCRMode.NATIONAL_ID_DETECTION)
+//            val intent =
+//                Intent(activity.applicationContext, DocumentActivity::class.java)
+//            intent.putExtra("scanType", DocumentActivity().backScan)
+//            intent.putExtra("localCode", EnrollSDK.localizationCode.name)
+//            startForBackResult.launch(intent)
+//            nationalIdFrontOcrViewModel.scanBack()
         }
         if (loading.value)
             Column(
@@ -184,9 +194,6 @@ private fun MainContent(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) { SpinKitLoadingIndicator() }
-
-
-
         else if (!failure.value?.message.isNullOrEmpty()) {
 
 
@@ -208,17 +215,16 @@ private fun MainContent(
 
                     }
                 }
-            }
-
-            else {
+            } else {
                 failure.value?.let {
                     val msg: String =
                         when {
                             it.message == "Object reference not set to an instance of an object." ->
                                 stringResource(id = R.string.someThingWentWrong)
                             // 0 is the fallback value
-                            (it.strInt!=0 && it.strInt.toString() == "10103") ->
+                            (it.strInt != 0 && it.strInt.toString() == "10103") ->
                                 stringResource(id = R.string.nationalIdAlreadyExist)
+
                             else ->
                                 it.message
                         }
@@ -230,21 +236,22 @@ private fun MainContent(
                         onPressedButton = {
                             nationalIdFrontOcrViewModel.resetFailure()
                             onBoardingViewModel.enableLoading()
-                            val intent =
-                                Intent(activity.applicationContext, DocumentActivity::class.java)
-                            intent.putExtra("scanType", DocumentActivity().frontScan)
-                            intent.putExtra("localCode", EnrollSDK.localizationCode.name)
-                            startForResult.launch(intent)
+                            initOCR(activity, OCRMode.NATIONAL_ID_DETECTION)
+
+                            /*                            val intent =
+                                                            Intent(activity.applicationContext, DocumentActivity::class.java)
+                                                        intent.putExtra("scanType", DocumentActivity().frontScan)
+                                                        intent.putExtra("localCode", EnrollSDK.localizationCode.name)
+                                                        startForResult.launch(intent)*/
                         },
                         secondButtonText = stringResource(id = R.string.exit),
                         onPressedSecondButton = {
                             activity.finish()
                             // 0 is the fallback value
-                            if((it.strInt!=0 && it.strInt.toString() == "10103")){
+                            if ((it.strInt != 0 && it.strInt.toString() == "10103")) {
                                 val (message, id) = nationalIdFrontOcrVM.splitMessageAndId(it.message)
                                 EnrollSDK.enrollCallback?.error(EnrollFailedModel(message, it, id))
-                            }
-                            else{
+                            } else {
                                 EnrollSDK.enrollCallback?.error(EnrollFailedModel(it.message, it))
                             }
                         }
@@ -255,9 +262,7 @@ private fun MainContent(
                     }
                 }
             }
-        }
-
-        else if (customerData.value != null) {
+        } else if (customerData.value != null) {
             if (customerData.value!!.fullNameEn != null)
                 if (!userHasModifiedText.value) {
                     userNameValue.value = TextFieldValue(customerData.value!!.fullNameEn!!)
@@ -354,11 +359,13 @@ private fun MainContent(
                 ButtonView(
                     onClick = {
                         onBoardingViewModel.enableLoading()
-                        val intent =
-                            Intent(activity.applicationContext, DocumentActivity::class.java)
-                        intent.putExtra("scanType", DocumentActivity().frontScan)
-                        intent.putExtra("localCode", EnrollSDK.localizationCode.name)
-                        startForResult.launch(intent)
+                        initOCR(activity, OCRMode.NATIONAL_ID_DETECTION)
+
+                        /* val intent =
+                             Intent(activity.applicationContext, DocumentActivity::class.java)
+                         intent.putExtra("scanType", DocumentActivity().frontScan)
+                         intent.putExtra("localCode", EnrollSDK.localizationCode.name)
+                         startForResult.launch(intent)*/
                     },
                     title = stringResource(id = R.string.reScan),
                     color = MaterialTheme.appColors.backGround,
@@ -368,6 +375,60 @@ private fun MainContent(
             }
         }
 
+    }
+}
+
+private fun initOCR(
+    activity: Activity,
+    ocrMode: OCRMode
+) {
+
+    try {
+
+        OCR.init(
+            environment = OCREnvironment.STAGING,
+            licenseResource = R.raw.enroll_cert,
+            localizationCode = LocalizationCode.AR,
+            ocrMode = ocrMode,
+            ocrCallback = object :
+                OCRCallback {
+                override fun success(ocrSuccessModel: OCRSuccessModel) {
+                    Log.d(
+                        "OCRCallback",
+                        "Nature image :${ocrSuccessModel.naturalExpressionImage}"
+                    )
+                    Log.d(
+                        "OCRCallback",
+                        "Smile image :${ocrSuccessModel.livenessSmileExpressionImage}"
+                    )
+                    Log.d(
+                        "OCRCallback",
+                        "National Id image :${ocrSuccessModel.nationalIdImage}"
+                    )
+
+                    Log.d(
+                        "OCRCallback",
+                        "OCR Message :${ocrSuccessModel.ocrMessage}"
+                    )
+
+                }
+
+                override fun error(ocrFailedModel: OCRFailedModel) {
+                    Log.d(
+                        "OCRError",
+                        "OCR Error :${ocrFailedModel.failureMessage}"
+                    )
+                }
+            },
+        )
+    } catch (e: Exception) {
+        Log.e("error", e.toString())
+    }
+    try {
+        OCR.launch(activity)
+    } catch (e: Exception) {
+        Toast.makeText(activity, e.message.toString(), Toast.LENGTH_SHORT).show()
+        Log.e("error", e.toString())
     }
 }
 

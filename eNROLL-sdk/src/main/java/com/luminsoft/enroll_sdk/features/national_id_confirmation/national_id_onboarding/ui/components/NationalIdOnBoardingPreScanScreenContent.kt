@@ -58,6 +58,7 @@ import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_na
 import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_navigation.passportOnBoardingConfirmationScreen
 import com.luminsoft.enroll_sdk.innovitices.activities.DocumentActivity
 import com.luminsoft.enroll_sdk.innovitices.core.DotHelper
+import com.luminsoft.enroll_sdk.lumin_sdk.core.LuminSDKHelper
 import com.luminsoft.enroll_sdk.main.main_data.main_models.get_onboaring_configurations.ChooseStep
 import com.luminsoft.enroll_sdk.main.main_data.main_models.get_onboaring_configurations.RegistrationStepSetting
 import com.luminsoft.enroll_sdk.main.main_presentation.main_onboarding.view_model.OnBoardingViewModel
@@ -68,6 +69,7 @@ import com.luminsoft.enroll_sdk.ui_components.components.SpinKitLoadingIndicator
 import com.luminsoft.enroll_sdk.ui_components.theme.AppColors
 import com.luminsoft.enroll_sdk.ui_components.theme.ConstantColors
 import com.luminsoft.enroll_sdk.ui_components.theme.appColors
+import com.luminsoft.ocr.core.models.OCRMode
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -216,6 +218,7 @@ private fun NationalIdOnly(
         ButtonView(
             onClick = {
                 rememberedViewModel.enableLoading()
+//                LuminSDKHelper.initOCR(activity ,OCRMode.NATIONAL_ID_DETECTION)
                 val intent = Intent(activity.applicationContext, DocumentActivity::class.java)
                 intent.putExtra("scanType", DocumentActivity().frontScan)
                 intent.putExtra("localCode", EnrollSDK.localizationCode.name)
@@ -245,7 +248,10 @@ private fun NationalIdOrPassport(
     ) {
         Spacer(modifier = Modifier.fillMaxHeight(0.10f))
 
-        Text(text = stringResource(id = R.string.choosePersonalConfirmation),fontFamily = MaterialTheme.typography.labelLarge.fontFamily,)
+        Text(
+            text = stringResource(id = R.string.choosePersonalConfirmation),
+            fontFamily = MaterialTheme.typography.labelLarge.fontFamily,
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         HorizontalDivider(
