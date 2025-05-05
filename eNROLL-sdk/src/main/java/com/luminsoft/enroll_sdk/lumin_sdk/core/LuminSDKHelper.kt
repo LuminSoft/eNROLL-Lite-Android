@@ -52,8 +52,7 @@ object LuminSDKHelper {
                         )
 
 
-
-                        val file = getDisc()
+                        val file = getDisc(activity)
 
                         if (!file.exists() && !file.mkdirs()) {
                             file.mkdir()
@@ -111,5 +110,10 @@ object LuminSDKHelper {
 //            Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
             Log.e("error", e.toString())
         }
+    }
+
+    private fun getDisc(activity: Activity): File {
+        val file = activity.cacheDir
+        return File(file, "/scanned/")
     }
 }
