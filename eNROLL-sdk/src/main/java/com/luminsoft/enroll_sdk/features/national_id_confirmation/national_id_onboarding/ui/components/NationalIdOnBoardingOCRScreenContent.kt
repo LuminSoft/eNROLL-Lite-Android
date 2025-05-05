@@ -3,8 +3,6 @@ package com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_o
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -47,6 +45,7 @@ import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_na
 import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_navigation.nationalIdOnBoardingErrorScreen
 import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_navigation.nationalIdOnBoardingFrontConfirmationScreen
 import com.luminsoft.enroll_sdk.features.national_id_confirmation.national_id_onboarding.view_model.NationalIdFrontOcrViewModel
+import com.luminsoft.enroll_sdk.innovitices.activities.DocumentActivity
 import com.luminsoft.enroll_sdk.innovitices.core.DotHelper
 import com.luminsoft.enroll_sdk.main.main_presentation.main_onboarding.view_model.OnBoardingViewModel
 import com.luminsoft.enroll_sdk.ui_components.components.BackGroundView
@@ -56,13 +55,6 @@ import com.luminsoft.enroll_sdk.ui_components.components.DialogView
 import com.luminsoft.enroll_sdk.ui_components.components.NormalTextField
 import com.luminsoft.enroll_sdk.ui_components.components.SpinKitLoadingIndicator
 import com.luminsoft.enroll_sdk.ui_components.theme.appColors
-import com.luminsoft.ocr.LocalizationCode
-import com.luminsoft.ocr.OCR
-import com.luminsoft.ocr.core.models.OCRCallback
-import com.luminsoft.ocr.core.models.OCREnvironment
-import com.luminsoft.ocr.core.models.OCRFailedModel
-import com.luminsoft.ocr.core.models.OCRMode
-import com.luminsoft.ocr.core.models.OCRSuccessModel
 import org.koin.compose.koinInject
 
 var userNameValue = mutableStateOf(TextFieldValue())
@@ -179,14 +171,12 @@ private fun MainContent(
 
     BackGroundView(navController = navController, showAppBar = true) {
         if (frontNIApproved.value) {
-            //TODO check lumin sdk here
-            initOCR(activity, OCRMode.NATIONAL_ID_DETECTION)
-//            val intent =
-//                Intent(activity.applicationContext, DocumentActivity::class.java)
-//            intent.putExtra("scanType", DocumentActivity().backScan)
-//            intent.putExtra("localCode", EnrollSDK.localizationCode.name)
-//            startForBackResult.launch(intent)
-//            nationalIdFrontOcrViewModel.scanBack()
+            val intent =
+                Intent(activity.applicationContext, DocumentActivity::class.java)
+            intent.putExtra("scanType", DocumentActivity().backScan)
+            intent.putExtra("localCode", EnrollSDK.localizationCode.name)
+            startForBackResult.launch(intent)
+            nationalIdFrontOcrViewModel.scanBack()
         }
         if (loading.value)
             Column(
@@ -236,13 +226,12 @@ private fun MainContent(
                         onPressedButton = {
                             nationalIdFrontOcrViewModel.resetFailure()
                             onBoardingViewModel.enableLoading()
-                            initOCR(activity, OCRMode.NATIONAL_ID_DETECTION)
 
-                            /*                            val intent =
-                                                            Intent(activity.applicationContext, DocumentActivity::class.java)
-                                                        intent.putExtra("scanType", DocumentActivity().frontScan)
-                                                        intent.putExtra("localCode", EnrollSDK.localizationCode.name)
-                                                        startForResult.launch(intent)*/
+                            val intent =
+                                Intent(activity.applicationContext, DocumentActivity::class.java)
+                            intent.putExtra("scanType", DocumentActivity().frontScan)
+                            intent.putExtra("localCode", EnrollSDK.localizationCode.name)
+                            startForResult.launch(intent)
                         },
                         secondButtonText = stringResource(id = R.string.exit),
                         onPressedSecondButton = {
@@ -359,13 +348,12 @@ private fun MainContent(
                 ButtonView(
                     onClick = {
                         onBoardingViewModel.enableLoading()
-                        initOCR(activity, OCRMode.NATIONAL_ID_DETECTION)
 
-                        /* val intent =
-                             Intent(activity.applicationContext, DocumentActivity::class.java)
-                         intent.putExtra("scanType", DocumentActivity().frontScan)
-                         intent.putExtra("localCode", EnrollSDK.localizationCode.name)
-                         startForResult.launch(intent)*/
+                        val intent =
+                            Intent(activity.applicationContext, DocumentActivity::class.java)
+                        intent.putExtra("scanType", DocumentActivity().frontScan)
+                        intent.putExtra("localCode", EnrollSDK.localizationCode.name)
+                        startForResult.launch(intent)
                     },
                     title = stringResource(id = R.string.reScan),
                     color = MaterialTheme.appColors.backGround,
@@ -375,60 +363,6 @@ private fun MainContent(
             }
         }
 
-    }
-}
-
-private fun initOCR(
-    activity: Activity,
-    ocrMode: OCRMode
-) {
-
-    try {
-
-        OCR.init(
-            environment = OCREnvironment.STAGING,
-            licenseResource = R.raw.enroll_cert,
-            localizationCode = LocalizationCode.AR,
-            ocrMode = ocrMode,
-            ocrCallback = object :
-                OCRCallback {
-                override fun success(ocrSuccessModel: OCRSuccessModel) {
-                    Log.d(
-                        "OCRCallback",
-                        "Nature image :${ocrSuccessModel.naturalExpressionImage}"
-                    )
-                    Log.d(
-                        "OCRCallback",
-                        "Smile image :${ocrSuccessModel.livenessSmileExpressionImage}"
-                    )
-                    Log.d(
-                        "OCRCallback",
-                        "National Id image :${ocrSuccessModel.nationalIdImage}"
-                    )
-
-                    Log.d(
-                        "OCRCallback",
-                        "OCR Message :${ocrSuccessModel.ocrMessage}"
-                    )
-
-                }
-
-                override fun error(ocrFailedModel: OCRFailedModel) {
-                    Log.d(
-                        "OCRError",
-                        "OCR Error :${ocrFailedModel.failureMessage}"
-                    )
-                }
-            },
-        )
-    } catch (e: Exception) {
-        Log.e("error", e.toString())
-    }
-    try {
-        OCR.launch(activity)
-    } catch (e: Exception) {
-        Toast.makeText(activity, e.message.toString(), Toast.LENGTH_SHORT).show()
-        Log.e("error", e.toString())
     }
 }
 
