@@ -12,12 +12,11 @@ dependencyResolutionManagement {
         mavenCentral()
         maven {
             url 'https://jitpack.io'
+            credentials {
+                username = "LuminSoft"
+                password = System.getenv("JITPACK_TOKEN") ?: "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"
+            }
         }
-        maven {
-            url 'http://maven.innovatrics.com/releases'
-            allowInsecureProtocol = true
-        }
-        jcenter()
     }
 }
 rootProject.name = "ekyc-android"

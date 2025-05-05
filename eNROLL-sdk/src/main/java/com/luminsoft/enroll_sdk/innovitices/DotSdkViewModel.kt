@@ -3,7 +3,6 @@ package com.luminsoft.enroll_sdk.innovitices
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.innovatrics.dot.core.DotSdk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -24,10 +23,11 @@ class DotSdkViewModel(
     }
 
     private suspend fun initializeDotSdkIfNeededInternal() {
-        when (DotSdk.isInitialized()) {
+        mutableState.update { it.copy(isInitialized = true) }
+   /*     when (DotSdk.isInitialized()) {
             true -> mutableState.update { it.copy(isInitialized = true) }
             false -> initializeDotSdkSafely()
-        }
+        }*/
     }
 
     private suspend fun initializeDotSdkSafely() = try {

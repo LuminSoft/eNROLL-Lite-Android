@@ -1,14 +1,12 @@
 package com.luminsoft.enroll_sdk.innovitices.activities
 
+//import com.innovatrics.dot.face.liveness.smile.SmileLivenessConfiguration
+//import com.innovatrics.dot.face.liveness.smile.SmileLivenessFragment
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import com.innovatrics.dot.face.liveness.smile.SmileLivenessConfiguration
-import com.innovatrics.dot.face.liveness.smile.SmileLivenessFragment
 import com.luminsoft.ekyc_android_sdk.R
 import com.luminsoft.enroll_sdk.innovitices.core.RESULT_INTERRUPTED
-import com.luminsoft.enroll_sdk.innovitices.smileliveness.BasicSmileLivenessFragment
 
 class SmileLivenessActivity : AppCompatActivity() {
     var outSmileLivenessUri = "smile-liveness-uri"
@@ -26,15 +24,15 @@ class SmileLivenessActivity : AppCompatActivity() {
             return
         }
         val bundle = bundleOf(
-            SmileLivenessFragment.CONFIGURATION to SmileLivenessConfiguration.Builder().build()
+//            SmileLivenessFragment.CONFIGURATION to SmileLivenessConfiguration.Builder().build()
         )
 
-        val fragment: Fragment = BasicSmileLivenessFragment()
-        fragment.arguments = bundle
+//        val fragment: Fragment = BasicSmileLivenessFragment()
+//        fragment.arguments = bundle
 
-        supportFragmentManager
-            .beginTransaction()
-            .replace(android.R.id.content, fragment)
-            .commit()
+//        supportFragmentManager
+//            .beginTransaction()
+//            .replace(android.R.id.content, fragment)
+//            .commit()
     }
 }
