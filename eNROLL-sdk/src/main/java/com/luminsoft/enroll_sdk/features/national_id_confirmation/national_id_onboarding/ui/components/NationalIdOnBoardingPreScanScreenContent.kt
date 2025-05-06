@@ -110,6 +110,21 @@ fun NationalIdOnBoardingPreScanScreen(
                 onBoardingViewModel.scanType.value = ScanType.FRONT
                 navController.navigate(nationalIdOnBoardingErrorScreen)
             }
+            else {
+                val errorMessage = it.data?.getStringExtra("errorMessage")
+
+                onBoardingViewModel.disableLoading()
+                if (errorMessage == null)
+                    onBoardingViewModel.errorMessage.value =
+                        context.getString(R.string.someThingWentWrong)
+                else
+                    onBoardingViewModel.errorMessage.value =
+                        errorMessage
+
+                onBoardingViewModel.scanType.value = ScanType.FRONT
+                navController.navigate(nationalIdOnBoardingErrorScreen)
+            }
+
         }
 
     val startPassportForResult =
@@ -134,6 +149,19 @@ fun NationalIdOnBoardingPreScanScreen(
                 onBoardingViewModel.disableLoading()
                 onBoardingViewModel.errorMessage.value =
                     context.getString(R.string.timeoutException)
+                onBoardingViewModel.scanType.value = ScanType.PASSPORT
+                navController.navigate(nationalIdOnBoardingErrorScreen)
+            } else {
+                val errorMessage = it.data?.getStringExtra("errorMessage")
+
+                onBoardingViewModel.disableLoading()
+                if (errorMessage == null)
+                    onBoardingViewModel.errorMessage.value =
+                        context.getString(R.string.someThingWentWrong)
+                else
+                    onBoardingViewModel.errorMessage.value =
+                        errorMessage
+
                 onBoardingViewModel.scanType.value = ScanType.PASSPORT
                 navController.navigate(nationalIdOnBoardingErrorScreen)
             }

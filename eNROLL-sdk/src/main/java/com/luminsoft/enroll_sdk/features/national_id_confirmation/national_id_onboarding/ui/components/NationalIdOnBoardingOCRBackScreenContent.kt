@@ -117,6 +117,19 @@ fun NationalIdOnBoardingBackConfirmationScreen(
                     context.getString(R.string.timeoutException)
                 onBoardingViewModel.scanType.value = ScanType.Back
                 navController.navigate(nationalIdOnBoardingErrorScreen)
+            }else {
+                val returnedErrorMessage = it.data?.getStringExtra("errorMessage")
+
+                onBoardingViewModel.disableLoading()
+                if (returnedErrorMessage == null)
+                    onBoardingViewModel.errorMessage.value =
+                        context.getString(R.string.someThingWentWrong)
+                else
+                    onBoardingViewModel.errorMessage.value =
+                        returnedErrorMessage
+
+                onBoardingViewModel.scanType.value = ScanType.Back
+                navController.navigate(nationalIdOnBoardingErrorScreen)
             }
         }
 
