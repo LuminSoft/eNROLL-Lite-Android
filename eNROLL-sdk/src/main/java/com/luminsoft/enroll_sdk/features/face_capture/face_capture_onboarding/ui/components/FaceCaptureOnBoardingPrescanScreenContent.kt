@@ -64,6 +64,18 @@ fun FaceCaptureBoardingPreScanScreenContent(
                 onBoardingViewModel.errorMessage.value =
                     context.getString(R.string.timeoutException)
                 navController.navigate(faceCaptureOnBoardingErrorScreen)
+            }else {
+                val returnedErrorMessage = it.data?.getStringExtra("errorMessage")
+
+                onBoardingViewModel.disableLoading()
+                if (returnedErrorMessage == null)
+                    onBoardingViewModel.errorMessage.value =
+                        context.getString(R.string.someThingWentWrong)
+                else
+                    onBoardingViewModel.errorMessage.value =
+                        returnedErrorMessage
+
+                navController.navigate(faceCaptureOnBoardingErrorScreen)
             }
         }
 
