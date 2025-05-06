@@ -1,7 +1,5 @@
 package com.luminsoft.enroll_sdk.innovitices.activities
 
-//import com.innovatrics.dot.document.autocapture.DocumentAutoCaptureConfiguration
-//import com.innovatrics.dot.document.autocapture.DocumentAutoCaptureFragment
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
@@ -40,38 +38,33 @@ class DocumentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val extras = intent.extras
+        var scanType = 0
+        var lang = "ar"
         if (extras != null) {
-            val value = extras.getInt("scanType", frontScan)
-            val lang = extras.getString("localCode", "ar")
+            scanType = extras.getInt("scanType", frontScan)
+            lang = extras.getString("localCode", "ar")
             setLocale(lang)
-            when (value) {
+            when (scanType) {
                 frontScan -> this.setTitle(R.string.document_front_screen)
                 backScan -> this.setTitle(R.string.document_back_screen)
                 passportScan -> this.setTitle(R.string.passport_screen)
             }
         }
+        val ocrMode: OCRMode = when (scanType) {
+            frontScan ->
+                OCRMode.NATIONAL_ID_DETECTION
 
+            backScan ->
+                OCRMode.NATIONAL_ID_DETECTION
+
+            else ->
+                OCRMode.PASSPORT_DETECTION
+
+        }
         super.onCreate(savedInstanceState)
-        LuminSDKHelper.initOCR(this, OCRMode.NATIONAL_ID_DETECTION)
+        LuminSDKHelper.initOCR(this, ocrMode, lang)
 
         setResult(RESULT_INTERRUPTED)
-//        setFragment()
     }
 
-    private fun setFragment() {
-        if (supportFragmentManager.findFragmentById(android.R.id.content) != null) {
-            return
-        }
-//        val bundle = bundleOf(
-//            DocumentAutoCaptureFragment.CONFIGURATION to DocumentAutoCaptureConfiguration.Builder()
-//                .build()
-//        )
-//        val fragment: Fragment = BasicDocumentAutoCaptureFragment()
-//        fragment.arguments = bundle
-
-//        supportFragmentManager
-//            .beginTransaction()
-//            .replace(android.R.id.content, fragment)
-//            .commit()
-    }
 }
