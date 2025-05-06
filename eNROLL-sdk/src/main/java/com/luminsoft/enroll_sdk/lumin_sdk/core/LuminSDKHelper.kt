@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import androidx.compose.ui.text.toLowerCase
 import com.luminsoft.ekyc_android_sdk.R
 import com.luminsoft.enroll_sdk.innovitices.core.RESULT_SUCCESS
 import com.luminsoft.ocr.LocalizationCode
@@ -22,35 +23,33 @@ object LuminSDKHelper {
 
     fun initOCR(
         activity: Activity,
-        ocrMode: OCRMode
+        ocrMode: OCRMode,
+        lang: String
     ) {
         try {
+
+            val lng: LocalizationCode = when (lang.lowercase()) {
+                "ar" ->
+                    LocalizationCode.AR
+
+                "en" ->
+                    LocalizationCode.EN
+
+                else -> LocalizationCode.AR
+            }
 
             OCR.init(
                 environment = OCREnvironment.STAGING,
                 licenseResource = R.raw.enroll_cert,
-                localizationCode = LocalizationCode.AR,
+                localizationCode = lng,
                 ocrMode = ocrMode,
                 ocrCallback = object :
                     OCRCallback {
                     override fun success(ocrSuccessModel: OCRSuccessModel) {
                         Log.d(
                             "OCRCallback",
-                            "Nature image :${ocrSuccessModel.naturalExpressionImage}"
-                        )
-                        Log.d(
-                            "OCRCallback",
-                            "Smile image :${ocrSuccessModel.livenessSmileExpressionImage}"
-                        )
-                        Log.d(
-                            "OCRCallback",
-                            "National Id image :${ocrSuccessModel.nationalIdImage}"
-                        )
-                        Log.d(
-                            "OCRCallback",
                             "OCR Message :${ocrSuccessModel.ocrMessage}"
                         )
-
 
                         val file = getDisc(activity)
 
@@ -61,33 +60,37 @@ object LuminSDKHelper {
                         val filename = String.format("${System.currentTimeMillis()}.jpeg")
                         val outfile = File(dir, filename)
 
-
                         val fOut: OutputStream = FileOutputStream(outfile)
-                        val pictureBitmap: Bitmap =
-                            ocrSuccessModel.nationalIdImage!! // obtaining the Bitmap
+
+
+                        val pictureBitmap: Bitmap = when (ocrMode) {
+                            OCRMode.NATIONAL_ID_DETECTION ->
+                                ocrSuccessModel.nationalIdImage!!
+
+                            OCRMode.PASSPORT_DETECTION ->
+                                ocrSuccessModel.passportImage!!
+
+                            else ->
+                                ocrSuccessModel.nationalIdImage!!
+                        }
 
                         pictureBitmap.compress(
                             Bitmap.CompressFormat.JPEG,
                             100,
                             fOut
-                        ) // saving the Bitmap to a file compressed as a JPEG with 85% compression rate
+                        )
 
-                        fOut.flush() // Not really required
+                        fOut.flush()
 
-                        fOut.close() // do not forget to close the stream
-
+                        fOut.close()
 
                         val intent = Intent()
                         val uri: Uri = Uri.fromFile(outfile)
 
-
                         intent.data = uri
-
 
                         activity.setResult(RESULT_SUCCESS, intent)
                         activity.finish()
-//                        text.value = "OCR Message: ${ocrSuccessModel.ocrMessage}"
-
                     }
 
                     override fun error(ocrFailedModel: OCRFailedModel) {
@@ -95,9 +98,6 @@ object LuminSDKHelper {
                             "OCRCallback",
                             "OCR Message :${ocrFailedModel.failureMessage}"
                         )
-
-//                        text.value = "OCR Error: ${ocrFailedModel.failureMessage}"
-
                     }
                 },
             )
@@ -107,7 +107,6 @@ object LuminSDKHelper {
         try {
             OCR.launch(activity)
         } catch (e: Exception) {
-//            Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
             Log.e("error", e.toString())
         }
     }
