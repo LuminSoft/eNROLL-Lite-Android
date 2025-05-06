@@ -5,8 +5,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
-import androidx.compose.ui.text.toLowerCase
-import com.luminsoft.ekyc_android_sdk.R
+import com.luminsoft.enroll_sdk.innovitices.activities.DocumentActivity
+import com.luminsoft.enroll_sdk.innovitices.core.RESULT_ERROR
+import com.luminsoft.enroll_sdk.innovitices.core.RESULT_INTERRUPTED
 import com.luminsoft.enroll_sdk.innovitices.core.RESULT_SUCCESS
 import com.luminsoft.ocr.LocalizationCode
 import com.luminsoft.ocr.OCR
@@ -38,9 +39,19 @@ object LuminSDKHelper {
                 else -> LocalizationCode.AR
             }
 
+            val resourceId = try {
+                activity.resources.getIdentifier("iengine", "raw", activity.packageName)
+            } catch (e: Exception) {
+                throw Exception("Failed to find license resource: ${e.message}")
+            }
+
+            // Validate resource ID
+            if (resourceId == 0) {
+                throw Exception("License resource R.raw.iengine not found in parent application")
+            }
             OCR.init(
                 environment = OCREnvironment.STAGING,
-                licenseResource = R.raw.enroll_cert,
+                licenseResource = resourceId,
                 localizationCode = lng,
                 ocrMode = ocrMode,
                 ocrCallback = object :
@@ -108,6 +119,10 @@ object LuminSDKHelper {
             OCR.launch(activity)
         } catch (e: Exception) {
             Log.e("error", e.toString())
+            val intent = Intent()
+            intent.putExtra("errorMessage", e.toString())
+            activity.setResult(RESULT_ERROR, intent)
+            activity.finish()
         }
     }
 

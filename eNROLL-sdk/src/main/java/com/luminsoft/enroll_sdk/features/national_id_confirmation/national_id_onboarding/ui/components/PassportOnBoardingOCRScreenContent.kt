@@ -116,6 +116,19 @@ fun PassportOnBoardingConfirmationScreen(
                     context.getString(R.string.timeoutException)
                 onBoardingViewModel.scanType.value = ScanType.PASSPORT
                 navController.navigate(nationalIdOnBoardingErrorScreen)
+            } else {
+                val errorMessage = it.data?.getStringExtra("errorMessage")
+
+                onBoardingViewModel.disableLoading()
+                if (errorMessage == null)
+                    onBoardingViewModel.errorMessage.value =
+                        context.getString(R.string.someThingWentWrong)
+                else
+                    onBoardingViewModel.errorMessage.value =
+                        errorMessage
+
+                onBoardingViewModel.scanType.value = ScanType.FRONT
+                navController.navigate(nationalIdOnBoardingErrorScreen)
             }
         }
 
@@ -170,7 +183,7 @@ private fun MainContent(
                 onPressedButton = {
                     activity.finish()
                     EnrollSDK.enrollCallback?.success(
-                       EnrollSuccessModel(
+                        EnrollSuccessModel(
                             activity.getString(R.string.successfulAuthentication),
                             onBoardingViewModel.documentId.value,
                             onBoardingViewModel.applicantId.value,
@@ -211,8 +224,9 @@ private fun MainContent(
                             it.message == "Object reference not set to an instance of an object." ->
                                 stringResource(id = R.string.someThingWentWrong)
                             // 0 is the fallback value
-                            (it.strInt!=0 && it.strInt.toString() == "10103") ->
+                            (it.strInt != 0 && it.strInt.toString() == "10103") ->
                                 stringResource(id = R.string.nationalIdAlreadyExist)
+
                             else ->
                                 it.message
                         }
@@ -234,11 +248,10 @@ private fun MainContent(
                         onPressedSecondButton = {
                             activity.finish()
                             // 0 is the fallback value
-                            if((it.strInt!=0 && it.strInt.toString() == "10103")){
+                            if ((it.strInt != 0 && it.strInt.toString() == "10103")) {
                                 val (message, id) = passportOcrVM.splitMessageAndId(it.message)
                                 EnrollSDK.enrollCallback?.error(EnrollFailedModel(message, it, id))
-                            }
-                            else{
+                            } else {
                                 EnrollSDK.enrollCallback?.error(EnrollFailedModel(it.message, it))
                             }
                         }

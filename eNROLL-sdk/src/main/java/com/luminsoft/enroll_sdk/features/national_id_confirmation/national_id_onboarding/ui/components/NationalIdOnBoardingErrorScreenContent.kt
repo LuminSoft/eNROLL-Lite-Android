@@ -25,7 +25,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.luminsoft.enroll_sdk.ui_components.theme.appColors
 import com.luminsoft.ekyc_android_sdk.R
 import com.luminsoft.enroll_sdk.core.models.EnrollFailedModel
 import com.luminsoft.enroll_sdk.core.sdk.EnrollSDK
@@ -42,6 +41,7 @@ import com.luminsoft.enroll_sdk.innovitices.core.DotHelper
 import com.luminsoft.enroll_sdk.main.main_presentation.main_onboarding.view_model.OnBoardingViewModel
 import com.luminsoft.enroll_sdk.ui_components.components.ButtonView
 import com.luminsoft.enroll_sdk.ui_components.components.LoadingView
+import com.luminsoft.enroll_sdk.ui_components.theme.appColors
 
 
 @Composable
@@ -79,7 +79,21 @@ fun NationalIdOnBoardingErrorScreen(
                     context.getString(R.string.timeoutException)
                 onBoardingViewModel.scanType.value = FRONT
                 navController.navigate(nationalIdOnBoardingErrorScreen)
+            } else {
+                val returnedErrorMessage = it.data?.getStringExtra("errorMessage")
+
+                onBoardingViewModel.disableLoading()
+                if (returnedErrorMessage == null)
+                    onBoardingViewModel.errorMessage.value =
+                        context.getString(R.string.someThingWentWrong)
+                else
+                    onBoardingViewModel.errorMessage.value =
+                        returnedErrorMessage
+
+                onBoardingViewModel.scanType.value = FRONT
+                navController.navigate(nationalIdOnBoardingErrorScreen)
             }
+
         }
 
     val startForBackResult =
@@ -103,6 +117,19 @@ fun NationalIdOnBoardingErrorScreen(
                 onBoardingViewModel.disableLoading()
                 onBoardingViewModel.errorMessage.value =
                     context.getString(R.string.timeoutException)
+                onBoardingViewModel.scanType.value = Back
+                navController.navigate(nationalIdOnBoardingErrorScreen)
+            } else {
+                val returnedErrorMessage = it.data?.getStringExtra("errorMessage")
+
+                onBoardingViewModel.disableLoading()
+                if (returnedErrorMessage == null)
+                    onBoardingViewModel.errorMessage.value =
+                        context.getString(R.string.someThingWentWrong)
+                else
+                    onBoardingViewModel.errorMessage.value =
+                        returnedErrorMessage
+
                 onBoardingViewModel.scanType.value = Back
                 navController.navigate(nationalIdOnBoardingErrorScreen)
             }
@@ -132,6 +159,19 @@ fun NationalIdOnBoardingErrorScreen(
                     context.getString(R.string.timeoutException)
                 onBoardingViewModel.scanType.value = PASSPORT
                 navController.navigate(nationalIdOnBoardingErrorScreen)
+            } else {
+                val returnedErrorMessage = it.data?.getStringExtra("errorMessage")
+
+                onBoardingViewModel.disableLoading()
+                if (returnedErrorMessage == null)
+                    onBoardingViewModel.errorMessage.value =
+                        context.getString(R.string.someThingWentWrong)
+                else
+                    onBoardingViewModel.errorMessage.value =
+                        returnedErrorMessage
+
+                onBoardingViewModel.scanType.value = PASSPORT
+                navController.navigate(nationalIdOnBoardingErrorScreen)
             }
         }
 
@@ -152,11 +192,20 @@ fun NationalIdOnBoardingErrorScreen(
 
             ) {
                 Spacer(modifier = Modifier.fillMaxHeight(0.25f))
-                val images= listOf(R.drawable.invalid_ni_icon_1,R.drawable.invalid_ni_icon_2,R.drawable.invalid_ni_icon_3)
+                val images = listOf(
+                    R.drawable.invalid_ni_icon_1,
+                    R.drawable.invalid_ni_icon_2,
+                    R.drawable.invalid_ni_icon_3
+                )
                 ImagesBox(images = images, modifier = Modifier.fillMaxHeight(0.35f))
 
                 Spacer(modifier = Modifier.height(30.dp))
-                errorMessage.value?.let { Text(text = it,fontFamily = MaterialTheme.typography.labelLarge.fontFamily,) }
+                errorMessage.value?.let {
+                    Text(
+                        text = it,
+                        fontFamily = MaterialTheme.typography.labelLarge.fontFamily,
+                    )
+                }
                 Spacer(modifier = Modifier.fillMaxHeight(0.35f))
 
                 ButtonView(

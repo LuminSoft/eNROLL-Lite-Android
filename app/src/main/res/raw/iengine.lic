@@ -1,45 +1,22 @@
 {
-    "version": "2.1",
-    "contract": {
-        "customer": "Excel_Evaluation",
-        "expiration": {
-            "day": 11,
-            "month": 6,
-            "year": 2025
-        },
-        "hwids": [
-            "A+PYBMZZuSjgIKID"
-        ],
-        "products": [
-            "iface"
-        ],
-        "idkit": {
-            "database_size": 0,
-            "max_client_connections": 0
-        },
-        "dot": {
-            "mobile": {
-                "face": {
-                    "enabled": "true"
-                },
-                "document": {
-                    "enabled": "true"
-                },
-                "faceLite": {
-                    "enabled": "true"
-                },
-                "nfc": {
-                    "enabled": "true"
-                },
-                "features": {
-                    "realTimeTransactionReportingEnabled": "true"
-                },
-                "palm": {
-                    "enabled": "true"
-                }
+   "contract":{
+      "customer":"Excel_Evaluation",
+      "expiration":{
+         "day":22,
+         "month":11,
+         "year":2025
+      },
+      "id":"com.luminsoft.EnrollTestingApp",
+      "eNROLL":{
+         "mobile":{
+            "face":{
+               "enabled":true
             },
-            "evaluation": "true"
-        }
-    },
-    "contract_signature": "AkvytvqqEEs9+F40Jq5dDElJZIm9RLRDiecYHQCGqXNFHE+EgOSPBeHd9Hm0xGEf/HGNVfzX38patvBZKGQHLC9mVBq/rKcD2a5e0x++ry8/ruktNs3zcv2N/KaXyvYMsF5v9BgIqobRrXtUmSPtXuwtt7y0wbV9DK1lIACqNT4="
+            "document":{
+               "enabled":true
+            }
+         }
+      }
+   },
+   "contractSignature":"dd5ec3698ad1d15f8b47adc1e4a8390986942280bf249e36064a2f4b7328a21873f5c38b0c425e801d6d836a9d68824d04a11d136bb4610335819a6960d1eb91"
 }
