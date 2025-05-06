@@ -1,38 +1,21 @@
 package com.luminsoft.enroll_sdk.innovitices.activities
 
-//import com.innovatrics.dot.face.liveness.smile.SmileLivenessConfiguration
-//import com.innovatrics.dot.face.liveness.smile.SmileLivenessFragment
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import com.luminsoft.ekyc_android_sdk.R
 import com.luminsoft.enroll_sdk.innovitices.core.RESULT_INTERRUPTED
+import com.luminsoft.enroll_sdk.lumin_sdk.core.LuminSDKHelper
+import com.luminsoft.ocr.core.models.OCRMode
 
 class SmileLivenessActivity : AppCompatActivity() {
     var outSmileLivenessUri = "smile-liveness-uri"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val lang = "ar"
+
         super.onCreate(savedInstanceState)
+        LuminSDKHelper.initOCR(this, OCRMode.SMILE_LIVENESS, lang)
+
         setResult(RESULT_INTERRUPTED)
-        setFragment()
-        this.setTitle(R.string.smile_liveness_screen)
-    }
-
-
-    private fun setFragment() {
-        if (supportFragmentManager.findFragmentById(android.R.id.content) != null) {
-            return
-        }
-        val bundle = bundleOf(
-//            SmileLivenessFragment.CONFIGURATION to SmileLivenessConfiguration.Builder().build()
-        )
-
-//        val fragment: Fragment = BasicSmileLivenessFragment()
-//        fragment.arguments = bundle
-
-//        supportFragmentManager
-//            .beginTransaction()
-//            .replace(android.R.id.content, fragment)
-//            .commit()
     }
 }
