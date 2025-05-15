@@ -7,6 +7,7 @@ pluginManagement {
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    def githubToken = gradle.hasProperty('githubToken') ? gradle.properties['githubToken'] : System.getenv('GITHUB_TOKEN') ?: 'default_token_if_needed'
     repositories {
         google()
         mavenCentral()
@@ -14,7 +15,7 @@ dependencyResolutionManagement {
             url 'https://jitpack.io'
             credentials {
                 username = "LuminSoft"
-                password = System.getenv("JITPACK_TOKEN") ?: "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"
+                password = githubToken
             }
         }
     }
