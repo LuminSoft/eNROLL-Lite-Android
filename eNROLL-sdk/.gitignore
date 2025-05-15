@@ -1,2 +1,4 @@
 *.apk
 /build
+/gradle.properties
+gradle.properties
