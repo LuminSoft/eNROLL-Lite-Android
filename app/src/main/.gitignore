@@ -4,5 +4,4 @@
 /assets/env_andrew
 *.apk
 
-/gradle.properties
-gradle.properties
+
