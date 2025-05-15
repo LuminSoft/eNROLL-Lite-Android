@@ -5,3 +5,4 @@
 *.apk
 
 /gradle.properties
+gradle.properties
