@@ -2,7 +2,7 @@
 
 # eNROLL 
 
-This document is a guide for eNROLL Android SDK. In addition, following the below steps will help you learn how to add and use (eNROLL SDK) in your Android Application.
+This document is a guide for eNROLL-Lite Android SDK. In addition, following the below steps will help you learn how to add and use (eNROLL Lite SDK) in your Android Application.
 
 
 
@@ -14,15 +14,15 @@ This document is a guide for eNROLL Android SDK. In addition, following the belo
 
 ## 2. INSTALLATION
 
-1-  Add eNROLL SDK dependency to the build.gradle (Module :app) file:
+1-  Add eNROLL Lite SDK dependency to the build.gradle (Module :app) file:
 
 ```bash
 dependencies {
-    implementation("com.github.LuminSoft:eNROLL-Android:latest")
+    implementation("com.github.LuminSoft:eNROLL-Lite-Android:latest")
 }
 ```
 
-- You can find the latest version  https://github.com/LuminSoft/eNROLL-Android/releases
+- You can find the latest version  https://github.com/LuminSoft/eNROLL-Lite-Android/releases
 
 
 2- Add Maven Repository in settings.gradle file
