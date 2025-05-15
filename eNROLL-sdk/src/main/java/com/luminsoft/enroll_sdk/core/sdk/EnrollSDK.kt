@@ -30,14 +30,14 @@ object EnrollSDK {
 
     private fun getBaseUrl(): String {
         return when (environment) {
-            EnrollEnvironment.STAGING -> "http://197.168.1.39"
-            EnrollEnvironment.PRODUCTION -> "https://enroll.nasps.org.eg"
+            EnrollEnvironment.STAGING -> "https://enrollite.luminsoft.net"
+            EnrollEnvironment.PRODUCTION -> "https://enrollite.luminsoft.net"
         }
     }
 
     fun getApisUrl(): String {
         return if (environment == EnrollEnvironment.STAGING)
-            getBaseUrl() + ":4800"
+            getBaseUrl() + ":7400/OnBoarding/"
         else getBaseUrl() + ":7400/OnBoarding/"
     }
 
