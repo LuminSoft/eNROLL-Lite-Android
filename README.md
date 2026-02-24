@@ -2,9 +2,8 @@
 
 # eNROLL-Lite Android SDK
 
-This document is a guide for eNROLL-Lite Android SDK. This is the **Lite version** without biometric features. Following the steps below will help you learn how to add and use eNROLL-Lite SDK in your Android Application.
+This document is a guide for eNROLL-Lite Android SDK. Following the steps below will help you learn how to add and use eNROLL-Lite SDK in your Android Application.
 
-> **Note:** This is the Lite version which includes OCR document scanning but does not include biometric features (face recognition, liveness detection). For the full SDK with biometrics, please contact LuminSoft.
 
 
 
