@@ -1,8 +1,10 @@
 
 
-# eNROLL 
+# eNROLL-Lite Android SDK
 
-This document is a guide for eNROLL-Lite Android SDK. In addition, following the below steps will help you learn how to add and use (eNROLL Lite SDK) in your Android Application.
+This document is a guide for eNROLL-Lite Android SDK. This is the **Lite version** without biometric features. Following the steps below will help you learn how to add and use eNROLL-Lite SDK in your Android Application.
+
+> **Note:** This is the Lite version which includes OCR document scanning but does not include biometric features (face recognition, liveness detection). For the full SDK with biometrics, please contact LuminSoft.
 
 
 
@@ -33,10 +35,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("http://maven.innovatrics.com/releases")
-            isAllowInsecureProtocol = true
-        }
         maven {
             url = uri("https://jitpack.io")
         }
@@ -121,11 +119,11 @@ try {
 ```
 
 
-## 5. VALUES DESCRIPTION
+## 5. PARAMETER DESCRIPTIONS
 
 
 .
-| Keys.     | Values                                                                                                                                                             |
+| Parameter | Description                                                                                                                                                        |
 | :-------- |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `tenantId` | **Required**. Write your organization tenant id                                                                                                                    |
 | `tenantSecret` | **Required**. Write your organization tenant secret.                                                                                                               |
