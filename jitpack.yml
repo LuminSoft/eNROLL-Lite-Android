@@ -1,7 +1,0 @@
-jdk:
-  - openjdk17
-before_install:
-  - ./gradlew --version
-  - echo "Building eNROLL-Lite SDK"
-install:
-  - ./gradlew clean :eNROLL-sdk:assembleRelease :eNROLL-sdk:publishToMavenLocal --stacktrace
