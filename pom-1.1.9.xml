@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.luminsoft</groupId>
   <artifactId>eNROLL-Lite</artifactId>
-  <version>1.1.8</version>
+  <version>1.1.9</version>
   <packaging>aar</packaging>
   <dependencyManagement>
     <dependencies>
@@ -177,7 +177,31 @@
     <dependency>
       <groupId>com.github.LuminSoft.Lumin-OCR</groupId>
       <artifactId>ocr</artifactId>
-      <version>0.0.34</version>
+      <version>0.0.36</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.mlkit</groupId>
+      <artifactId>text-recognition</artifactId>
+      <version>16.0.1</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jmrtd</groupId>
+      <artifactId>jmrtd</artifactId>
+      <version>0.7.42</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.scuba</groupId>
+      <artifactId>scuba-sc-android</artifactId>
+      <version>0.0.24</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk18on</artifactId>
+      <version>1.78.1</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
