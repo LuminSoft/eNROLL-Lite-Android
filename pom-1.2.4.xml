@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.luminsoft</groupId>
   <artifactId>eNROLL-Lite</artifactId>
-  <version>1.2.3</version>
+  <version>1.2.4</version>
   <packaging>aar</packaging>
   <dependencyManagement>
     <dependencies>
@@ -177,7 +177,7 @@
     <dependency>
       <groupId>com.github.LuminSoft</groupId>
       <artifactId>Lumin-OCR</artifactId>
-      <version>0.0.38</version>
+      <version>0.0.40</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
