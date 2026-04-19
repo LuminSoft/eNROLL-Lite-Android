@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.luminsoft</groupId>
   <artifactId>eNROLL-Lite</artifactId>
-  <version>1.2.4</version>
+  <version>1.2.5</version>
   <packaging>aar</packaging>
   <dependencyManagement>
     <dependencies>
@@ -218,6 +218,12 @@
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcutil-jdk15to18</artifactId>
       <version>1.81</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>dev.keiji.jp2</groupId>
+      <artifactId>jp2-android</artifactId>
+      <version>1.0.5</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
