@@ -1,5 +1,5 @@
 jdk:
   - openjdk17
 install:
-  - FILE=eNROLL-sdk-1.2.6.aar
-  - mvn install:install-file -Dfile=$FILE -DgroupId=com.github.LuminSoft -DartifactId=eNROLL-Lite-Android -Dversion=1.2.6 -Dpackaging=aar -DpomFile=pom-1.2.6.xml
+  - FILE=eNROLL-sdk-1.3.0.aar
+  - mvn install:install-file -Dfile=$FILE -DgroupId=com.github.LuminSoft -DartifactId=eNROLL-Lite-Android -Dversion=1.3.0 -Dpackaging=aar -DpomFile=pom-1.3.0.xml
