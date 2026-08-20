@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.luminsoft</groupId>
   <artifactId>eNROLL-Lite</artifactId>
-  <version>1.3.4</version>
+  <version>1.3.5</version>
   <packaging>aar</packaging>
   <dependencyManagement>
     <dependencies>
@@ -177,13 +177,19 @@
     <dependency>
       <groupId>com.github.LuminSoft</groupId>
       <artifactId>Lumin-OCR</artifactId>
-      <version>0.0.40</version>
+      <version>0.0.42</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.google.mlkit</groupId>
       <artifactId>text-recognition</artifactId>
       <version>16.0.1</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.mlkit</groupId>
+      <artifactId>face-detection</artifactId>
+      <version>16.1.7</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
